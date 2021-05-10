@@ -4,9 +4,9 @@ from tkinter.ttk import Frame, Label, Entry, Button, Combobox
 import tkinter as tk
 import threading
 from tkinter.filedialog import askopenfilename
-from controler import models2
-from controler import inoutFile,loadData
-from controler.var import *
+from controller import models2
+from controller import inoutFile,loadData
+from controller.var import *
 class Content(Frame):
     def __init__(self, pr, **kw):
         super().__init__(**kw)

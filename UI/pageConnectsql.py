@@ -1,4 +1,4 @@
-from controler import database_connector as dc
+from controller import database_connector as dc
 import tkinter as tk
 from tkinter import X, LEFT, RIGHT
 from tkinter.ttk import Frame, Button

@@ -2,7 +2,7 @@ import tkinter as tk
 import os
 from UI import pageConnectsql as cn
 from UI import pageIndex
-from controler import database_connector as dbc
+from controller import database_connector as dbc
 root = tk.Tk()
 root.geometry("900x600")
 root.minsize(900,650)

@@ -5,9 +5,9 @@ import tkinter as tk
 import threading
 from tkinter.filedialog import askopenfilename
 import logger
-from controler import models2
-from controler import inoutFile,loadData
-from controler.var import *
+from controller import models2
+from controller import inoutFile,loadData
+from controller.var import *
 lock = threading.Lock()
 class Content(Frame):
     result_filein = None

@@ -5,10 +5,10 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from threading import Thread
 import logger
-from controler.var import *
+from controller.var import *
 import threading
-from controler import models2
-from controler import database_connector as dbc
+from controller import models2
+from controller import database_connector as dbc
 data=None
 table=None
 len_data=None

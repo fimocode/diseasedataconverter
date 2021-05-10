@@ -2,8 +2,8 @@ import tkinter
 from tkinter import Tk,ttk, Text, TOP, BOTH, X, N, LEFT,StringVar,OptionMenu,RIGHT,BOTTOM
 from tkinter.ttk import Frame, Label, Entry, Button, Combobox
 from tkinter.filedialog import askopenfilename
-from controler import models2
-from controler import inoutFile
+from controller import models2
+from controller import inoutFile
 class Content(Frame):
     list_columns = None
     def __init__(self,pr, **kw):
