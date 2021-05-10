@@ -2,8 +2,8 @@ import tkinter
 from tkinter import Tk,ttk, Text, TOP, BOTH, X, N, LEFT,StringVar,OptionMenu,RIGHT,BOTTOM
 from tkinter.ttk import Frame, Label, Entry, Button, Combobox
 from tkinter.filedialog import askopenfilename
-from controller import models2
-from controller import inoutFile
+from models import model
+from services import load_file
 class Content(Frame):
     list_columns = None
     def __init__(self,pr, **kw):
@@ -26,9 +26,9 @@ class Content(Frame):
         self.list_columns_entry=[]
         self.list_columns =[]
         self.delimiter = self.delimiteret.get()
-        result=inoutFile.load_file(filepath=self.filepath, delimiter=self.delimiter)
+        result=load_file.load_file(filepath=self.filepath, delimiter=self.delimiter)
         if result==True:
-            self.list_columns = inoutFile.get_list_column()
+            self.list_columns = load_file.get_list_column()
             self.show_list_frame()
             self.convert_button['state'] = tkinter.NORMAL
             self.convert_button.pack(side=BOTTOM)
@@ -42,7 +42,7 @@ class Content(Frame):
         self.list_columns_edit=[]
         for i in range(0,len(self.list_columns_entry)):
             self.list_columns_edit.append(self.list_columns_entry[i].get())
-        result=inoutFile.convert(self.list_columns_edit)
+        result=load_file.convert(self.list_columns_edit)
         if result==True:
             self.result_convert.config(text='Thành công!')
         else:

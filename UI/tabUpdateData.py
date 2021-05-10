@@ -4,9 +4,9 @@ from tkinter.ttk import Frame, Label, Entry, Button, Combobox
 import tkinter as tk
 import threading
 from tkinter.filedialog import askopenfilename
-from controller import models2
-from controller import inoutFile,loadData
-from controller.var import *
+from models import model
+from services import load_file, load_data
+from controllers.var import *
 class Content(Frame):
     def __init__(self, pr, **kw):
         super().__init__(**kw)
@@ -36,7 +36,7 @@ class Content(Frame):
         frame2.pack(fill=X)
         select_tablelb = Label(frame2, text="Chọn bảng")
         select_tablelb.pack(side=LEFT, fill=X, padx=8, pady=5)
-        self.comboExample = Combobox(frame2, values=models2.getListTables())
+        self.comboExample = Combobox(frame2, values=model.getListTables())
         self.comboExample.current(1)
         self.comboExample.pack(side=LEFT, fill=X, padx=5, pady=5)
         frame3 = Frame(self.pr, width=800)
@@ -73,10 +73,10 @@ class Content(Frame):
         self.update_title.pack(fill=X, padx=50)
         self.list_column_show=[]
         self.delimiter = self.delimiteret.get()
-        result=loadData.import_data(filepath=self.filepath, delimiter=self.delimiter,table_input=self.comboExample.get())
+        result=load_data.import_data(filepath=self.filepath, delimiter=self.delimiter,table_input=self.comboExample.get())
         if(result==True):
             self.frame15.pack(fill=X, pady=10)
-            self.list_column = loadData.get_list_column_import()
+            self.list_column = load_data.get_list_column_import()
             self.combobox_key['values']=self.list_column
             self.frame_show_content.pack(fill=X, pady=15,padx=50)
             # chon khoa chinh
@@ -113,9 +113,9 @@ class Content(Frame):
             list.remove(self.combobox_key.get())
         update_ui_thread = threading.Thread(target=self.update_ui)
         update_ui_thread.start()
-        update_data_thread = threading.Thread(target=loadData.update_data, args=(self.combobox_key.get(),list,self.comboExample.get()))
+        update_data_thread = threading.Thread(target=load_data.update_data, args=(self.combobox_key.get(),list,self.comboExample.get()))
         update_data_thread.start()
-        #result = loadData.update_data(key = self.combobox_key.get(),list_column=list,table=self.comboExample.get())
+        #result = load_data.update_data(key = self.combobox_key.get(),list_column=list,table=self.comboExample.get())
     def update_ui(self):
         while(G.j<G.len_data):
             self.result_update.config(text=str(int(G.j * 100 / (G.len_data-1))) + '%')
