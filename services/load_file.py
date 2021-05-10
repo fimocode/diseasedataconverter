@@ -1,6 +1,8 @@
 import pandas as pd
+
 data=None
 to_filepath=None
+
 def load_file(filepath,delimiter):
     try:
         global data
@@ -11,8 +13,12 @@ def load_file(filepath,delimiter):
         return True
     except:
         return False
+
+
 def get_list_column():
     return list(data.columns.values)
+
+
 def convert(list):
     global data
     try:
