@@ -4,8 +4,8 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 import models2
 import database_connector as dbc
-username = "root"
-password = ""
+username = "skrc"
+password = "Aa@123456"
 host = "localhost"
 port = "3306"
 database = "diseasetest"

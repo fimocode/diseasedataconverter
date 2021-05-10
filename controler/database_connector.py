@@ -4,8 +4,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
 # from logger import logging
-# from settings import DBConfig, RETRY_WAIT_SEC
-#from models import Image
+from settings import DBConfig
 
 class DbConnector:
     session = None
@@ -16,7 +15,13 @@ class DbConnector:
     @staticmethod
     def connectsql(host,port,username,password,database):
         try:
-            DbConnector.engine = create_engine('mysql+pymysql://{}:{}@{}:{}/{}'.format(username,password,host,port,database))
+            DbConnector.engine = create_engine(
+                "mysql://{db_user}:{db_password}@{db_host}/{db_name}".format(
+                    db_user=DBConfig.DB_USERNAME,
+                    db_password=DBConfig.DB_PASSWORD,
+                    db_host=DBConfig.DB_HOSTNAME,
+                    db_name=DBConfig.DB_NAME,
+                ), pool_pre_ping=True)
             Session = sessionmaker(DbConnector.engine)
             DbConnector.session = Session()
             DbConnector.engine.connect()
@@ -24,12 +29,13 @@ class DbConnector:
                 return True
         except:
             return False
+
     def get_session(self):
         return self.session
+
     def updated_one_record(self, model):
         model.updated_at = datetime.now()
         self.session.commit()
-
 
     def update_by_batch(self, model, mappings):
         for idx, obj in enumerate(mappings):
