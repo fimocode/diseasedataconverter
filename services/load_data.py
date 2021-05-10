@@ -5,13 +5,17 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from threading import Thread
 import logger
-from controler.var import *
+from controllers.var import *
 import threading
-from controler import models2
-from controler import database_connector as dbc
+from models import model
+from models import database_connector as dbc
+
+
 data=None
 table=None
 len_data=None
+
+
 def import_data(filepath,delimiter,table_input):
     try:
         global data
@@ -24,21 +28,25 @@ def import_data(filepath,delimiter,table_input):
         return True
     except:
         return False
+
+
 def get_list_column_import():
     global table
     list1= list(data.columns.values)
-    object = models2.get_table_object(table)
-    list2=models2.get_list_columns(object=object)
+    object = model.get_table_object(table)
+    list2=model.get_list_columns(object=object)
     list3 = list(set(list1).intersection(list2))
     return list3
+
+
 def load_data(list):
     list_null = ['NULL', 'NA', 'nan', '', 'NaN']
     global len_data
     global table
-    print('loadData.load_data')
+    print('Load data')
     try:
         for G.i in range(0, len_data):
-            object = models2.get_table_object(table)
+            object = model.get_table_object(table)
             for j in range(0, len(list)):
                 key = list[j]
                 val = data[list[j]][G.i]
@@ -53,6 +61,8 @@ def load_data(list):
         G.result_import_data=  True
     except:
         G.result_import_data=  True
+
+
 #method update du lieu
 def update_data(key,list_column,table):
     list_null=['NULL','NA','nan','','NaN']

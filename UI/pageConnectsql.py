@@ -1,7 +1,9 @@
-from controler import database_connector as dc
+from models import database_connector as dc
 import tkinter as tk
 from tkinter import X, LEFT, RIGHT
 from tkinter.ttk import Frame, Button
+
+
 class ConnectSQL(tk.Frame):
     def __init__(self,next, **kw):
         super().__init__(**kw)
@@ -58,6 +60,8 @@ class ConnectSQL(tk.Frame):
         self.portet.insert(0,'3306')
         self.usernameet.insert(0,'root')
         self.dbet.insert(0,'diseasetest')
+
+
     def connect(self):
         rel = dc.DbConnector.connectsql(host=self.hostet.get(),port=self.portet.get(),username=self.usernameet.get(),password=self.passwordet.get(),database=self.dbet.get())
         print(rel)
