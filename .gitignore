@@ -1,2 +1,6 @@
 venv3/
 .env
+__pycache__/
+Detention_Dariy_Mix_06.csv
+Detention_Dariy_Mix_07.csv
+disease1.csv

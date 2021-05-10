@@ -17,8 +17,7 @@ class DbConnector:
                 db_user=DBConfig.DB_USERNAME,
                 db_password=DBConfig.DB_PASSWORD,
                 db_host=DBConfig.DB_HOSTNAME,
-                db_name=DBConfig.DB_NAME,
-                db_charset=DBConfig.DB_CHARSET
+                db_name=DBConfig.DB_NAME
             ), pool_pre_ping=True)
         Session = sessionmaker(self.engine)
         self.session = Session()
