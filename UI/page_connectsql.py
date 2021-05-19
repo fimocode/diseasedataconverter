@@ -1,15 +1,13 @@
 from models import database_connector as dc
 import tkinter as tk
-from tkinter import X, LEFT, RIGHT
+from tkinter import X
 from tkinter.ttk import Frame, Button
-
-
-class ConnectSQL(tk.Frame):
+class connect_sql(tk.Frame):
     def __init__(self,next, **kw):
         super().__init__(**kw)
         self.next = next
-        self.initUI()
-    def initUI(self):
+        self.init_ui()
+    def init_ui(self):
         #hang 0
         frame0 = Frame(self)
         frame0.pack(fill=X)
@@ -56,17 +54,11 @@ class ConnectSQL(tk.Frame):
         frame7.pack(fill=X)
         self.submit = Button(frame7,text="Submit",command=self.connect)
         self.submit.pack()
-        self.hostet.insert(0,'localhost')
-        self.portet.insert(0,'3306')
-        self.usernameet.insert(0,'root')
-        self.dbet.insert(0,'diseasetest')
-
 
     def connect(self):
         rel = dc.DbConnector.connectsql(host=self.hostet.get(),port=self.portet.get(),username=self.usernameet.get(),password=self.passwordet.get(),database=self.dbet.get())
-        print(rel)
         if rel == True:
             self.pack_forget()
             self.next.pack()
         else:
-            self.rel.config(text="Kết nối thất bại!")
+            self.rel.config(text="Conection failed!")

@@ -1,33 +1,22 @@
-import os
-
-from sqlalchemy import Column, String, Integer, ForeignKey, DECIMAL, Boolean, Text, Float, BigInteger
+from sqlalchemy import Column, String, Integer, ForeignKey, DECIMAL, Boolean, Text, Float,BigInteger
 from sqlalchemy import DateTime
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import relationship, reconstructor
-
-import settings
 Base = declarative_base()
 
 
 class BaseModel:
-    pass
-
+    id = Column(Integer,primary_key=True)
 
 class countries(Base, BaseModel):
     __tablename__ = 'countries'
-    id = Column(Integer,primary_key=True)
     name = Column(String(50))
-
 
 class diseases(Base, BaseModel):
     __tablename__ = 'diseases'
-    id = Column(Integer,primary_key=True)
     name = Column(String(50))
-
 
 class geo_locations(Base, BaseModel):
     __tablename__ = 'geo_locations'
-    id = Column(Integer,primary_key=True)
     coord_precision = Column(DECIMAL)
     x_coord = Column(DECIMAL)
     y_coord = Column(DECIMAL)
@@ -38,26 +27,22 @@ class geo_locations(Base, BaseModel):
 
 class species(Base, BaseModel):
     __tablename__ = 'species'
-    id = Column(Integer,primary_key=True)
     name = Column(String(50))
 
 
 class production_types(Base, BaseModel):
     __tablename__ = 'production_types'
-    id = Column(Integer,primary_key=True)
     name = Column(String(50))
 
 
 class establishments(Base, BaseModel):
     __tablename__ = 'establishments'
-    id = Column(Integer,primary_key=True)
     geo_location_id = Column(Integer, ForeignKey(geo_locations.id))
     production_type_id = Column(Integer, ForeignKey(production_types.id))
 
 
 class sub_units(Base, BaseModel):
     __tablename__ = 'sub_units'
-    id = Column(Integer,primary_key=True)
     establishment_id = Column(Integer, ForeignKey(establishments.id))
     geo_location_id = Column(Integer, ForeignKey(geo_locations.id))
     production_type_id = Column(Integer, ForeignKey(production_types.id))
@@ -68,8 +53,6 @@ class sub_units(Base, BaseModel):
 
 class animals(Base, BaseModel):
     __tablename__ = 'animals'
-    id = Column(Integer,primary_key=True)
-    animal_id = Column(String(20))
     species_id = Column(Integer)
     production_type_id = Column(Integer)
     sub_unit_id = Column(Integer)
@@ -84,7 +67,6 @@ class animals(Base, BaseModel):
 
 class disease_detections(Base, BaseModel):
     __tablename__ = 'disease_detections'
-    id = Column(Integer,primary_key=True)
     geo_location_id = Column(Integer, ForeignKey(geo_locations.id))
     disease_id = Column(Integer, ForeignKey(diseases.id))
     species_id = Column(Integer, ForeignKey(species.id))
@@ -101,23 +83,19 @@ class disease_detections(Base, BaseModel):
 
 class monitoring_datas(Base, BaseModel):
     __tablename__ = 'monitoring_datas'
-    id = Column(Integer,primary_key=True)
     animal_id = Column(Integer, ForeignKey(animals.id))
     sub_unit_id = Column(Integer, ForeignKey(sub_units.id))
     establishment_id = Column(Integer, ForeignKey(establishments.id))
     disease_detection_id = Column(Integer, ForeignKey(disease_detections.id))
-
-
-def getListTables():
+#-------END TABLES CLASS-------
+#Function get tables information
+def get_list_tables():
     return list(Base.metadata.tables.keys())
-
-
 def get_list_columns(object):
-    print(object)
     return list(object.__table__.c.keys())
-
-
 def get_table_object(table):
     klass = globals()[table]
     object = klass()
     return object
+def get_list_columns_in_table(table_name):
+    return  list(Base.metadata.tables[table_name].columns.keys())
