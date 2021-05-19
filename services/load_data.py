@@ -3,7 +3,7 @@ import datetime
 import time
 import tkinter as tk
 import pandas as pd
-from controlers.var import *
+from controllers.var import *
 from models import database_connector as dbc, models
 from UI import tab_import_data as tid
 from UI import tab_update_data as tud
@@ -105,4 +105,3 @@ def update_data(key,list_column,table,id_start):
     except:
         tud.Content.result_update.config(text="Error update data!")
         G.result_update_data = False
-

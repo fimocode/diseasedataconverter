@@ -4,7 +4,7 @@ from tkinter.ttk import Frame, Label, Entry, Button, Combobox
 from tkinter.filedialog import askopenfilename
 from services import load_file
 from models import models
-from controlers.var import *
+from controllers.var import *
 class Content(Frame):
     list_columns = None
     def __init__(self,pr, **kw):
