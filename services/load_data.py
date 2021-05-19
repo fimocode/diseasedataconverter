@@ -1,21 +1,16 @@
-import time
-from sqlalchemy import update
-import pandas as pd
-from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
-from threading import Thread
-import logger
-from controllers.var import *
 import threading
-from models import model
-from models import database_connector as dbc
-
-
+import datetime
+import time
+import tkinter as tk
+import pandas as pd
+from controlers.var import *
+from models import database_connector as dbc, models
+from UI import tab_import_data as tid
+from UI import tab_update_data as tud
+import numpy as np
 data=None
 table=None
 len_data=None
-
-
 def import_data(filepath,delimiter,table_input):
     try:
         global data
@@ -28,67 +23,86 @@ def import_data(filepath,delimiter,table_input):
         return True
     except:
         return False
-
-
 def get_list_column_import():
     global table
     list1= list(data.columns.values)
-    object = model.get_table_object(table)
-    list2=model.get_list_columns(object=object)
+    object = models.get_table_object(table)
+    list2= models.get_list_columns(object=object)
     list3 = list(set(list1).intersection(list2))
     return list3
-
-
-def load_data(list):
-    list_null = ['NULL', 'NA', 'nan', '', 'NaN']
-    global len_data
-    global table
-    print('Load data')
+def load_data(list,id_start):
     try:
-        for G.i in range(0, len_data):
-            object = model.get_table_object(table)
+        list_null = ['NULL', 'NA', 'nan', '', 'NaN']
+        global len_data
+        global table
+        G.record_start=id_start
+        G.time_start=datetime.datetime.utcnow()
+        for G.i in range(id_start, len_data):
+            object = models.get_table_object(table)
             for j in range(0, len(list)):
                 key = list[j]
                 val = data[list[j]][G.i]
-                #if val !='NA' and val != "NULL" and val != '':
-                if val not in list_null:
+                if str(val) not in list_null:
                     setattr(object, key, val)
             dbc.DbConnector.session.add(object)
             del object
-            if (G.i % 100000 == 0 or G.i == len_data-1):
-                print(str(int(G.i * 100 / G.len_data)) + '%')
-                dbc.DbConnector.session.commit()
+            if (G.i % 1000 == 0 or G.i == len_data-1):
+                dbc.DbConnector.conmmitsql()
+                tid.Content.result_import.config(text=str(round(G.i * 100 / (G.len_data-1), 4)) + '%')
+            if G.i == (G.len_data - 1):
+                tid.Content.reset_button['state'] = tk.NORMAL
+            if(G.active==False):
+                break
+            G.record_end = G.i
+            G.time_end = datetime.datetime.utcnow()
+        tid.Content.num_record_lb.config(text=f'Import {G.record_end - G.record_start + 1} records')
+        tid.Content.num_time_lb.config(text=f'Total {str((G.time_end - G.time_start).total_seconds())} seconds')
         G.result_import_data=  True
+    except SystemExit:
+        print('stop import')
     except:
-        G.result_import_data=  True
-
-
+        tid.Content.result_import.config(text="Error import data!")
+        G.result_import_data=  False
 #method update du lieu
-def update_data(key,list_column,table):
-    list_null=['NULL','NA','nan','','NaN']
-    global data
-    global len_data
-    cluster = ''
-    str1 = f"update {table} set "
+def update_data(key,list_column,table,id_start):
     try:
-        for G.j in range(0,G.len_data):
+        list_null=['NULL','NA','nan','','NaN']
+        global data
+        global len_data
+        G.j = id_start
+        G.record_start = id_start
+        G.time_start = datetime.datetime.utcnow()
+        str1 = f"update {table} set "
+        for G.j in range(id_start,G.len_data):
             str2 = ""
             str3 = f" where {key}='{data[key][G.j]}';"
             for i in range(0, len(list_column)):
                 if i == len(list_column) - 1:
-                    #if data[list_column[i]][G.j] == 'NULL' or data[list_column[i]][G.j] == 'NA' or data[list_column[i]][G.j] == '':
                     if str(data[list_column[i]][G.j]) in list_null:
                         str2 = str2 + f"{list_column[i]} = NULL"
                     else:
                         str2 = str2 + f"{list_column[i]} = '{data[list_column[i]][G.j]}'"
                 else:
-                    #if data[list_column[i]][G.j] == 'NULL' or data[list_column[i]][G.j] == 'NA' or data[list_column[i]][G.j] == '':
                     if str(data[list_column[i]][G.j]) in list_null:
                         str2 = str2 + f"{list_column[i]} = NULL,"
                     else:
                         str2 = str2 + f"{list_column[i]} = '{data[list_column[i]][G.j]}',"
             query = str1 + str2 + str3
-            dbc.DbConnector.session.execute(query)
+            dbc.DbConnector.executesql(query)
+            if (G.j % 1000 == 0 or G.j == len_data - 1):
+                tud.Content.result_update.config(text=str(round(G.j * 100 / (G.len_data-1), 4)) + '%')
+            if G.j == (G.len_data - 1):
+                tud.Content.reset_button['state'] = tk.NORMAL
+            if G.active == False:
+                break
+            G.record_end = G.j
+            G.time_end = datetime.datetime.utcnow()
+        tud.Content.num_record_lb.config(text=f'Import {G.record_end - G.record_start + 1} records')
+        tud.Content.num_time_lb.config(text=f'Total {str((G.time_end - G.time_start).total_seconds())} seconds')
         G.result_update_data = True
+    except SystemExit:
+        print('stop update')
     except:
+        tud.Content.result_update.config(text="Error update data!")
         G.result_update_data = False
+
