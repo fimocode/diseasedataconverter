@@ -15,7 +15,15 @@ sudo apt install python3.6-dev libpython3-dev
 
 sudo apt install python-pip python-wheel python-dev virtualenv
 
-pip install -r requirments.txt
+sudo virtualenv --system-site-packages -p python3.6 ./venv3
+
+source venv3/bin/activate
+
+pip install -r requirements.txt
+
+In case failed:
+
+cat requirements.txt | xargs -n 1 pip install
 
 ## Initialize DB
 
