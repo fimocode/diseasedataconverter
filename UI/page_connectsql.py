@@ -11,9 +11,9 @@ class connect_sql(tk.Frame):
         #hang 0
         frame0 = Frame(self)
         frame0.pack(fill=X)
-        header_title1 = tk.Label(frame0,text = "PHẦN MỀM CHUẨN HÓA DỮ LIỆU DATABASE",font=('Arial',18,'bold'),)
+        header_title1 = tk.Label(frame0,text = "Data Normalization Application",font=('Arial',18,'bold'),)
         header_title1.pack(pady=50)
-        header_title2 = tk.Label(frame0,text = "Kết mối MYSQL",font=('Arial',15,'bold'),pady=20)
+        header_title2 = tk.Label(frame0,text = "Connect MYSQL",font=('Arial',15,'bold'),pady=20)
         header_title2.pack()
         #hang1
         frame_form = Frame(self)
