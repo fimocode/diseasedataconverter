@@ -3,6 +3,7 @@ from datetime import datetime
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
+
 class DbConnector:
     session = None
     engine = None
@@ -13,7 +14,15 @@ class DbConnector:
     @staticmethod
     def connectsql(host,port,username,password,database):
         try:
-            DbConnector.engine = create_engine('mysql+pymysql://{}:{}@{}:{}/{}'.format(username,password,host,port,database))
+            DbConnector.engine = create_engine(
+            "mysql://{db_user}:{db_password}@{db_host}/{db_name}?charset={db_charset}".format(
+                db_user=username,
+                db_password=password,
+                db_host=host,
+                db_name=database,
+                db_charset='utf8'
+            ), pool_pre_ping=True)
+            # DbConnector.engine = create_engine('mysql+pymysql://{}:{}@{}:{}/{}'.format(username,password,host,port,database))
             Session = sessionmaker(DbConnector.engine)
             DbConnector.session = Session()
             DbConnector.conn = DbConnector.engine.connect()

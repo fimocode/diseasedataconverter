@@ -8,7 +8,11 @@ from tkinter.filedialog import askopenfilename
 from models import models
 from services import load_data
 from controllers.var import *
+
+
 lock = threading.Lock()
+
+
 class Content(Frame):
     reset_button = None
     result_filein = None

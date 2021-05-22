@@ -5,6 +5,8 @@ from tkinter.filedialog import askopenfilename
 from services import load_file
 from models import models
 from controllers.var import *
+
+
 class Content(Frame):
     list_columns = None
     def __init__(self,pr, **kw):
@@ -50,8 +52,8 @@ class Content(Frame):
         for i in range(0,len(self.list_columns_entry)):
             self.list_columns_edit.append(self.list_columns_entry[i].get())
         result= load_file.convert(self.list_columns_edit)
-        if result==True:
-            self.result_convert.config(text='Successful!')
+        if result:
+            self.result_convert.config(text=f'Convert success. Your new data in {result}!')
         else:
             self.result_convert.config(text='Error write file!')
     def initUI(self):

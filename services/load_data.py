@@ -8,9 +8,13 @@ from models import database_connector as dbc, models
 from UI import tab_import_data as tid
 from UI import tab_update_data as tud
 import numpy as np
+
+
 data=None
 table=None
 len_data=None
+
+
 def import_data(filepath,delimiter,table_input):
     try:
         global data
