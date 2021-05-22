@@ -6,7 +6,9 @@ import threading
 from tkinter.filedialog import askopenfilename
 from models import models
 from services import load_data
-from controlers.var import *
+from controllers.var import *
+
+
 class Content(Frame):
     reset_button = None
     result_update = None
