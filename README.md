@@ -17,6 +17,8 @@ sudo apt install python-pip python-wheel python-dev virtualenv
 
 sudo virtualenv --system-site-packages -p python3.6 ./venv3
 
+sudo apt-get install python-tk python3-tk tk-dev
+
 source venv3/bin/activate
 
 pip install -r requirements.txt
@@ -25,6 +27,7 @@ In case failed:
 
 cat requirements.txt | xargs -n 1 pip install
 
+cp .env.example .env
 ## Initialize DB
 
 mysql -u root -p < schema.sql
