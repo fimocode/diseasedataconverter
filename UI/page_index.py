@@ -7,6 +7,8 @@ class Index(Frame):
     def __init__(self, **kw):
         super().__init__(**kw)
         self.init_ui()
+
+
     def init_ui(self):
         #Tao thanh Tabbar
         tabControl=ttk.Notebook(self,width=900)

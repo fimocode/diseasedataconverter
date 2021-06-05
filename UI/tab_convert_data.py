@@ -15,11 +15,15 @@ class Content(Frame):
         self.frame2=None
         self.list_column_frame4=None
         self.initUI()
+
+
     def select_file(self):
         Tk().withdraw()
         self.filepath = askopenfilename()
         self.filenameet.insert(0,self.filepath)
         self.import_file_button['state'] = tkinter.NORMAL
+
+
     def click_import_file(self):
         self.convert_button['state'] = tkinter.DISABLED
         if self.frame2!=None:
@@ -46,6 +50,8 @@ class Content(Frame):
             self.frame_content.pack(side=LEFT)
         else:
             self.result_filein.config(text='Error import file!')
+
+
     def click_convert(self):
 
         self.list_columns_edit=[]
@@ -56,6 +62,8 @@ class Content(Frame):
             self.result_convert.config(text=f'Convert success. Your new data in {result}!')
         else:
             self.result_convert.config(text='Error write file!')
+
+
     def initUI(self):
         title1 = Label(self.pr,text = "Convert data",font=G.font_header1)
         title1.pack()
@@ -99,6 +107,7 @@ class Content(Frame):
         self.result_convert = Label(self.pr, text="")
         self.convert_button = Button(self.pr,text="Convert",command=self.click_convert)
 
+
     def show_list_frame(self):
         for i in range(0, len(self.list_columns)):
             self.list_columns_label.append(Label(self.frame2, text=self.list_columns[i]))
@@ -106,6 +115,8 @@ class Content(Frame):
             self.list_columns_entry[i].insert(0,self.list_columns[i])
             self.list_columns_label[i].grid(row=i,column=0, padx = 5, pady = 5)
             self.list_columns_entry[i].grid(row=i,column=1, padx = 5, pady = 5)
+
+
     def click_reset(self):
         self.frame_content.forget()
         self.frame2.pack_forget()

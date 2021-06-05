@@ -19,18 +19,23 @@ class Content(Frame):
     result_import = None
     num_record_lb = None
     num_time_lb = None
+
+
     def __init__(self, pr, **kw):
         super().__init__(**kw)
         self.pr = pr
         self.init_ui()
         self.filepath=''
         self.frame_show_list  = None
-    def select_file(self):
 
+
+    def select_file(self):
         Tk().withdraw()
         self.filepath = askopenfilename()
         self.filenameet.insert(0, self.filepath)
         self.import_file_button['state'] = tk.NORMAL
+
+
     def init_ui(self):
         title1 = Label(self.pr, text="Import data", font=G.font_header1)
         title1.pack()
@@ -68,6 +73,8 @@ class Content(Frame):
         self.frame15 = Frame(self.pr, width=800)
         self.import_title = Label(self.frame15, text="Select input columns", font=G.font_header3)
         self.import_title.pack(fill=X, padx=40,pady=5)
+
+
     def click_import_data(self):
         try:
             self.refresh()
@@ -107,6 +114,8 @@ class Content(Frame):
             Content.reset_button['state'] = tk.NORMAL
         else:
             self.result_filein.config('Error load file')
+
+
     def refresh(self):
         self.frame14.pack_forget()
         self.frame15.pack_forget()
@@ -120,6 +129,8 @@ class Content(Frame):
         #self.filenameet.delete(0, "end")
         if self.frame_show_list !=None:
             self.frame_show_list.destroy()
+
+
     def enter(self):
         G.active=True
         self.enter_button['state']=tk.DISABLED

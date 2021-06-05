@@ -11,6 +11,8 @@ class connect_sql(tk.Frame):
         super().__init__(**kw)
         self.next = next
         self.init_ui()
+
+
     def init_ui(self):
         #hang 0
         frame0 = Frame(self)
@@ -63,6 +65,7 @@ class connect_sql(tk.Frame):
         frame7.pack(fill=X)
         self.submit = Button(frame7,text="Submit",command=self.connect)
         self.submit.pack()
+
 
     def connect(self):
         rel = dc.DbConnector.connectsql(host=self.hostet.get(),port=self.portet.get(),username=self.usernameet.get(),password=self.passwordet.get(),database=self.dbet.get())

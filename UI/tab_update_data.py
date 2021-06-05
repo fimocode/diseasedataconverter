@@ -14,16 +14,22 @@ class Content(Frame):
     result_update = None
     num_record_lb = None
     num_time_lb = None
+
+
     def __init__(self, pr, **kw):
         super().__init__(**kw)
         self.pr = pr
         self.init_ui()
         self.filepath=''
+
+
     def select_file(self):
         Tk().withdraw()
         self.filepath = askopenfilename()
         self.filenameet.insert(0, self.filepath)
         self.import_file_button['state'] = tk.NORMAL
+
+
     def init_ui(self):
         title1 = Label(self.pr, text="Update data ", font=G.font_header1)
         title1.pack()
@@ -61,6 +67,8 @@ class Content(Frame):
         self.frame15 = Frame(self.pr, width=800)
         self.update_title = Label(self.frame15, text="Select column to update", font=G.font_header3)
         self.frame_show_content = None
+
+
     def click_import_data(self):
         try:
             self.refresh()
@@ -117,6 +125,8 @@ class Content(Frame):
             Content.num_record_lb.pack(side=BOTTOM)
         else:
             self.result_filein.config('Error load file')
+
+
     def refresh(self):
         self.frame14.pack_forget()
         self.frame15.pack_forget()
@@ -129,6 +139,8 @@ class Content(Frame):
         Content.result_update.destroy()
         self.import_file_button['state'] = tk.DISABLED
         #self.filenameet.delete(0,"end")
+
+
     def enter(self):
         G.active=True
         self.enter_button['state'] = tk.DISABLED
@@ -143,6 +155,8 @@ class Content(Frame):
             list.remove(self.combobox_key.get())
         update_data_thread = threading.Thread(target=load_data.update_data, args=(self.combobox_key.get(), list, self.comboExample.get(), id_start))
         update_data_thread.start()
+
+
     def cancel(self):
         G.active = False
         Content.reset_button['state'] = tk.NORMAL
