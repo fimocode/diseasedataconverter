@@ -93,7 +93,7 @@ class Content(Frame):
         self.update_title.pack(fill=X, padx=40)
         self.list_column_show=[]
         self.delimiter = self.delimiteret.get()
-        result= load_data.import_data(filepath=self.filepath, delimiter=self.delimiter, table_input=self.comboExample.get())
+        result= load_data.load_data(filepath=self.filepath, delimiter=self.delimiter, table_input=self.comboExample.get())
         if(result==True):
             self.frame14.pack(fill=X, padx=10)
             self.frame15.pack(fill=X, padx=10)

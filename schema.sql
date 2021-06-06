@@ -23,7 +23,7 @@ DROP TABLE IF EXISTS `animals`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `animals` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `species_id` int(11) DEFAULT NULL,
   `production_type_id` int(11) DEFAULT NULL,
   `sub_unit_id` int(11) DEFAULT NULL,
@@ -60,7 +60,7 @@ DROP TABLE IF EXISTS `countries`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `countries` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(45) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `id_UNIQUE` (`id`),
@@ -76,7 +76,7 @@ DROP TABLE IF EXISTS `disease_detections`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `disease_detections` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `geo_location_id` int(11) DEFAULT NULL,
   `disease_id` int(11) DEFAULT NULL,
   `species_id` int(11) DEFAULT NULL,
@@ -109,7 +109,7 @@ DROP TABLE IF EXISTS `diseases`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `diseases` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(45) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `name_UNIQUE` (`name`)
@@ -124,7 +124,7 @@ DROP TABLE IF EXISTS `establishments`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `establishments` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `geo_location_id` int(11) DEFAULT NULL,
   `production_type_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
@@ -143,7 +143,7 @@ DROP TABLE IF EXISTS `geo_locations`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `geo_locations` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `coord_precision` decimal(10,0) DEFAULT NULL,
   `x_coord` decimal(10,0) DEFAULT NULL,
   `y_coord` decimal(10,0) DEFAULT NULL,
@@ -164,7 +164,7 @@ DROP TABLE IF EXISTS `monitoring_datas`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `monitoring_datas` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `animal_id` int(11) DEFAULT NULL,
   `sub_unit_id` int(11) DEFAULT NULL,
   `establishment_id` int(11) DEFAULT NULL,
@@ -189,7 +189,7 @@ DROP TABLE IF EXISTS `production_types`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `production_types` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(45) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `name_UNIQUE` (`name`)
@@ -204,7 +204,7 @@ DROP TABLE IF EXISTS `species`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `species` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(45) NOT NULL,
   PRIMARY KEY (`id`,`name`),
   UNIQUE KEY `species_UNIQUE` (`id`),
@@ -220,7 +220,7 @@ DROP TABLE IF EXISTS `sub_units`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `sub_units` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `establishment_id` int(11) NOT NULL,
   `geo_location_id` int(11) NOT NULL,
   `production_type_id` int(11) NOT NULL,

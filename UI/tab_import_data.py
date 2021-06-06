@@ -5,12 +5,15 @@ from tkinter.ttk import Frame, Label, Entry, Button, Combobox
 import tkinter as tk
 import threading
 from tkinter.filedialog import askopenfilename
-from models import models
+from models import database_connector_import as dbci, models
 from services import load_data
 from controllers.var import *
+import multiprocessing
+from multiprocessing import Process, Pipe
+from settings import number_of_process_import
+from UI import page_connectsql as pcsql
 
-
-lock = threading.Lock()
+# lock = threading.Lock()
 
 
 class Content(Frame):
@@ -59,7 +62,7 @@ class Content(Frame):
         self.comboExample.pack(side=LEFT, fill=X, padx=5, pady=5)
         frame3 = Frame(self.pr, width=800)
         frame3.pack(fill=X)
-        self.import_file_button = Button(frame3, text='Load file',command=self.click_import_data)
+        self.import_file_button = Button(frame3, text='Load file',command=self.click_load_data)
         self.import_file_button['state'] = tk.DISABLED
         self.import_file_button.pack(side=LEFT,padx=5)
         self.result_filein = Label(frame3, text="")
@@ -75,7 +78,7 @@ class Content(Frame):
         self.import_title.pack(fill=X, padx=40,pady=5)
 
 
-    def click_import_data(self):
+    def click_load_data(self):
         try:
             self.refresh()
         except:
@@ -85,7 +88,7 @@ class Content(Frame):
         self.frame_show_list = Frame(self.pr, width=800)
         self.list_column_show=[]
         self.delimiter = self.delimiteret.get()
-        result= load_data.import_data(filepath=self.filepath, delimiter=self.delimiter, table_input=self.comboExample.get())
+        result = load_data.load_data(filepath=self.filepath, delimiter=self.delimiter, table_input=self.comboExample.get())
         if result==True:
             self.frame14.pack(fill=X,padx=10)
             self.frame15.pack(fill=X,padx=10)
@@ -137,12 +140,35 @@ class Content(Frame):
         Content.reset_button['state'] = tk.DISABLED
         self.import_file_button['state'] = tk.DISABLED
         id_start = int(self.id_start_et.get())
-        list = []
+        list_datas = []
         for i in range(0, len(self.list_column)):
             if self.checkbox_var[i].get() == 1:
-                list.append(self.list_column[i])
-        import_data_thread = threading.Thread(target=load_data.load_data, args=(list, id_start))
-        import_data_thread.start()
+                list_datas.append(self.list_column[i])
+        batch_size = (G.len_data - id_start) // number_of_process_import
+        for i in range(0, number_of_process_import):
+            db_connector_import = dbci.DbConnector()
+            # db_connector_import.connectsql(host=pcsql.connect_sql.hostet.get(),port=pcsql.connect_sql.portet.get(),username=pcsql.connect_sql.usernameet.get(),password=pcsql.connect_sql.passwordet.get(),database=pcsql.connect_sql.dbet.get())
+            db_connector_import.connectsql()
+            id_end = id_start + batch_size
+            if i == number_of_process_import - 1:
+                id_end = G.len_data - 1
+            import_data_process = multiprocessing.Process(target=load_data.import_data, args=(list_datas, id_start, id_end, i, db_connector_import))
+            import_data_process.start()
+            id_start = id_end + 1
+            # import_data_process.join()
+        while(True):
+            if G.process_record_end[number_of_process_import-1] == G.len_data - 1:
+                self.num_record_lb.config(text=f'Import {G.process_record_end[number_of_process_import-1] - G.process_record_start[0] + 1} records')
+                self.num_time_lb.config(text=f'Total {str((max(G.process_time_end) - min(G.process_time_start)).total_seconds())} seconds')
+                G.result_import_data = True
+                break
+            progress_text = ''
+            for i in range(number_of_process_import):
+                progress_text += str(round(G.process_index_data[i] * 100 / (G.len_data-1), 4)) + '%\n'
+            self.result_import.config(text=progress_text)
+            time.sleep(1)
+
+
     def cancel(self):
         G.active = False
         Content.reset_button['state']=tk.NORMAL
