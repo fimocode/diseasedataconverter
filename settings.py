@@ -17,3 +17,4 @@ class DBConfig:
 
 pandas_limit_read_csv = int(os.getenv('PANDAS_LIMIT_READ_CSV', 1))
 import_data_path = os.getenv('IMPORT_DATA_PATH', '/home/buinhatduy/workspaces/diseasedataconverter/data')
+number_of_process_import = int(os.getenv('NUMBER_OF_PROCESS_IMPORT', 8))
