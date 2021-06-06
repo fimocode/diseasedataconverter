@@ -8,6 +8,7 @@ from models import database_connector as dbc, models
 from UI import tab_import_data as tid
 from UI import tab_update_data as tud
 import numpy as np
+from settings import number_of_process_import
 
 
 data=None
@@ -15,7 +16,7 @@ table=None
 len_data=None
 
 
-def import_data(filepath,delimiter,table_input):
+def load_data(filepath, delimiter, table_input):
     try:
         global data
         global table
@@ -27,6 +28,8 @@ def import_data(filepath,delimiter,table_input):
         return True
     except:
         return False
+
+
 def get_list_column_import():
     global table
     list1= list(data.columns.values)
@@ -34,39 +37,45 @@ def get_list_column_import():
     list2= models.get_list_columns(object=object)
     list3 = list(set(list1).intersection(list2))
     return list3
-def load_data(list,id_start):
+
+
+def import_data(list_datas, id_start, id_end, process):
     try:
         list_null = ['NULL', 'NA', 'nan', '', 'NaN']
         global len_data
         global table
-        G.record_start=id_start
-        G.time_start=datetime.datetime.utcnow()
-        for G.i in range(id_start, len_data):
+        G.process_record_start[process]=id_start
+        G.process_time_start[process]=datetime.datetime.utcnow()
+        for G.process_index_data[process] in range(id_start, id_end+1):
             object = models.get_table_object(table)
-            for j in range(0, len(list)):
-                key = list[j]
-                val = data[list[j]][G.i]
+            for j in range(0, len(list_datas)):
+                key = list_datas[j]
+                val = data[list_datas[j]][G.process_index_data[process]]
                 if str(val) not in list_null:
                     setattr(object, key, val)
             dbc.DbConnector.session.add(object)
-            del object
-            if (G.i % 1000 == 0 or G.i == len_data-1):
+            if (G.process_index_data[process] % 1000 == 0 or G.process_index_data[process] == id_end):
                 dbc.DbConnector.conmmitsql()
-                tid.Content.result_import.config(text=str(round(G.i * 100 / (G.len_data-1), 4)) + '%')
-            if G.i == (G.len_data - 1):
+                tid.Content.result_import.config(text=str(round(G.process_index_data[process] * 100 / (G.len_data-1), 4)) + '%')
+            if G.process_index_data[process] == G.len_data - 1:
                 tid.Content.reset_button['state'] = tk.NORMAL
             if(G.active==False):
                 break
-            G.record_end = G.i
-            G.time_end = datetime.datetime.utcnow()
-        tid.Content.num_record_lb.config(text=f'Import {G.record_end - G.record_start + 1} records')
-        tid.Content.num_time_lb.config(text=f'Total {str((G.time_end - G.time_start).total_seconds())} seconds')
-        G.result_import_data=  True
-    except SystemExit:
+            G.process_record_end[process] = G.process_index_data[process]
+            G.process_time_end[process] = datetime.datetime.utcnow()
+
+        # print(f'Process {process} ' + str(G.process_record_end[process]))
+        # if process == 2:
+        # tid.Content.num_record_lb.config(text=f'Import {G.process_record_end[process] - G.process_record_start[process] + 1} records')
+        # tid.Content.num_time_lb.config(text=f'Total {str((G.process_time_end[process] - G.process_time_start[process]).total_seconds())} seconds')
+        # G.result_import_data = True
+    except Exception as e:
+        print('Error while import' + e)
         print('stop import')
-    except:
         tid.Content.result_import.config(text="Error import data!")
-        G.result_import_data=  False
+        G.result_import_data = False
+
+
 #method update du lieu
 def update_data(key,list_column,table,id_start):
     try:
