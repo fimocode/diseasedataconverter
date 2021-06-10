@@ -34,7 +34,8 @@ class DbConnector:
     def conmmitsql():
         try:
             DbConnector.session.commit()
-        except:
+        except Exception as e:
+            print(e)
             print('stop commit')
             raise SystemExit
 
@@ -42,7 +43,8 @@ class DbConnector:
     def executesql(sql):
         try:
             DbConnector.session.execute(sql)
-        except:
+        except Exception as e:
+            print(e)
             print('stop update')
             raise SystemExit
     @staticmethod

@@ -104,7 +104,8 @@ def update_data(key,list_column,table,id_start):
         tud.Content.num_record_lb.config(text=f'Import {G.record_end - G.record_start + 1} records')
         tud.Content.num_time_lb.config(text=f'Total {str((G.time_end - G.time_start).total_seconds())} seconds')
         G.result_update_data = True
-    except SystemExit:
+    except Exception as e:
+        print(e)
         print('stop update')
     except:
         tud.Content.result_update.config(text="Error update data!")
